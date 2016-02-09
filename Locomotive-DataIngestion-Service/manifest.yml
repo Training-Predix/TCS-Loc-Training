@@ -1,0 +1,20 @@
+---
+applications:
+  - name: locomotive-dataingestion-service
+    buildpack: java_buildpack
+    path: target/Locomotive-service-1.0.0.jar
+    services:
+      - locomotive-asset
+      - locomotive-timeseries
+      - locomotive-uaa  
+env:
+    SPRING_PROFILES_ACTIVE : cloud,clouddev
+    predix_asset_name: locomotive-asset
+    predix_timeseries_name: locomotive-timeseries    
+    predix_oauthRestHost: 328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io    
+    predix_oauthClientId: client:client
+    trustedIssuerIdsRegexPattern: ^https://(.*\\.)?328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token$
+    accessTokenEndpointUrl : https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token    
+    clientId : client
+    clientSecret: client
+    #predixWebSocketURI: ws://cargo-ui-socket.run.aws-usw02-pr.ice.predix.io/livestream/messages

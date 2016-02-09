@@ -1,0 +1,7 @@
+locomotive-client/
+Servers/
+.metadata/
+.recommenders/
+loco-client/target/
+Locomotive-DataIngestion-Service/target/
+RemoteSystemsTempFiles/

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.7.2.201511260958-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
+	<configs>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.handler.AssetDataHandler</config>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.handler.DataIngestionHandler</config>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.handler.TimeSeriesDataIngestionHandler</config>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.websocket.WebSocketClient</config>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.websocket.WebSocketConfig</config>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.websocket.WebsocketEndpoint</config>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.LocomotiveMonitoringBoot</config>
+	</configs>
+	<autoconfigs>
+		<config>java:com.tcs.predix.beta.time.series.ingestion.CorsFilter</config>
+	</autoconfigs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>
