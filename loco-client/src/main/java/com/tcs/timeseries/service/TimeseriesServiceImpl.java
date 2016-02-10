@@ -103,6 +103,7 @@ public class TimeseriesServiceImpl {
 				}
 				
 				return dataPointsObject.toString();
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -146,7 +147,7 @@ public class TimeseriesServiceImpl {
 			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
 			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity, String.class);
 			
-			log.info("TimeseriesServiceImpl :: retrieveDataPoints : response - " +  response.getBody());
+			log.info("TimeseriesServiceImpl :: retrieveDataPoints : response ==============================> " +  response.getBody());
 			
 			return response.getBody();
 			
@@ -171,11 +172,12 @@ public class TimeseriesServiceImpl {
 	    try{
 
 	    	HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-
 	    	HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.GET, entity, String.class);
-//	    	log.info("TimeseriesServiceImpl :: retrieveTags : response - " +  response.getBody());
 	    	
+	    	log.info("TimeseriesServiceImpl :: retrieveTags : response ----------->>>>>>>>>>>>>>>>> " +  response.getBody());
+    	
 	    	return response.getBody();
+	    	
 	    }catch (Exception e){
 	    	e.printStackTrace();
 	    }

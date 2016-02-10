@@ -2,7 +2,7 @@
 applications:
   - name: locomotive-client-service
     buildpack: java_buildpack
-    path: target/Locomotive-service-1.0.0.jar
+    path: target/locomotive-client-1.2.0.jar
  
 env:
     SPRING_PROFILES_ACTIVE : cloud,clouddev
