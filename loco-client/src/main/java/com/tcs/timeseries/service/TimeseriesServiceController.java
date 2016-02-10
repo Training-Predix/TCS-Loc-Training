@@ -1,6 +1,7 @@
 package com.tcs.timeseries.service;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,18 +11,28 @@ public class TimeseriesServiceController {
 	
 	private static Logger log = Logger.getLogger(TimeseriesServiceController.class);
 	
-	@RequestMapping(value = "/png/tags", method = RequestMethod.GET)
+	@Autowired
+	public TimeseriesServiceImpl tsimpl;
+	
+	@RequestMapping(value = "/locomotive/tags", method = RequestMethod.GET)
 	public String retrieveTags() {
 
 		log.info("TimeseriesServiceController: retrieveTags ");
 
-//		String[] oauthClient  = restConfig.getOauthClientId().split(":");
-		
-		
+		String str = tsimpl.timeseries("tags");
 
-//		log.info("TimeseriesServiceController: retrieveTags " + oauthClient);
+		return str;
+	}
+	
 
-		return "hello";
+	@RequestMapping(value = "/locomotive/datapoints", method = RequestMethod.GET)
+	public String retrieveDatapoints() {
+
+		log.info("TimeseriesServiceController: retrievedatapoints ");
+
+		String str1 = tsimpl.timeseries("data");
+
+		return str1;
 	}
 
 }

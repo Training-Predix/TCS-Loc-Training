@@ -1,9 +1,17 @@
 package com.tcs.timeseries.service;
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.apache.http.Header;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,91 +20,119 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.ge.predix.solsvc.restclient.impl.RestClient;
+
 
 @Component
 public class TimeseriesServiceImpl {
 	
 	private static Logger log = Logger.getLogger(TimeseriesServiceImpl.class);
 	
-	public void timeseries() {
-/*		ClientCredentialsResourceDetails clientDetails = new ClientCredentialsResourceDetails();
+	 @PostConstruct
+	    private void init()
+	    {
+		  System.out.println("Test");
+	    }
+	 @PreDestroy
+	 private void destroy()
+	    {
+		  System.out.println("Test");
+	    }
+	
+	@Autowired
+	@Qualifier("restClient")
+	public  RestClient rest;
+	
+	
+	public String timeseries(String tag) {
 		
-		clientDetails.setClientId("client");
-		clientDetails.setClientSecret("client");
 		
-		String accessUrl = "https://13a56c35-3065-41e3-9e8f-51e5b7b43234.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token";
+		boolean oauthClientIdEncode = true;
+		String oauthPort = "80";
+		String oauthGrantType = "client_credentials";
+		String oauthResource = "/oauth/token";
+		String proxyHost = null;
+		String proxyPort = null;
+		String oauthClientId = "client:client";
+		String oauthHost = "328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io";
+
+		List<Header> headers = this.rest.getOauthHttpHeaders(oauthClientId, oauthClientIdEncode);
+		String tokenString = this.rest.requestToken(headers, oauthResource, oauthHost, oauthPort, oauthGrantType,
+				proxyHost, proxyPort);
+
+		log.debug("TOKEN = " + tokenString);
 		
-        clientDetails.setAccessTokenUri(accessUrl);
-        clientDetails.setGrantType("client_credentials");
-       
-        OAuth2RestTemplate oauth2RestTemplate = new OAuth2RestTemplate(clientDetails);
+		JSONObject token = new JSONObject(tokenString);
+
         
-        log.info("TimeseriesServiceImpl :: Access Token - " +  oauth2RestTemplate.getAccessToken().getValue());*/
+        String authorization = "Bearer " +token.getString("access_token");
         
-        String authorization = "Bearer " +  oauth2RestTemplate.getAccessToken().getValue();
-        
-        
-        
-        String tags = retrieveTags(authorization);
-        log.info("TimeseriesServiceImpl :: retrieveTags : response - " + tags);
-        
-        String dataPoints = retrieveDataPoints(authorization);
-        log.info("TimeseriesServiceImpl :: retrieveDataPoints : response - " + dataPoints);
-        
-        try {
-			JSONObject dataPointsObject = new JSONObject(dataPoints);
+		if (tag.equalsIgnoreCase("tags")) {
+			String tags = retrieveTags(authorization);
+			log.info("TimeseriesServiceImpl :: retrieveTags : response - " + tags);
+			return tags;
 			
-			JSONArray tagsArray = dataPointsObject.getJSONArray("tags");
-			System.out.println("tagsArray: " + tagsArray);
-			
-			for (int i=0; i < tagsArray.length(); i++) {
-				JSONObject jsonTagsObject = tagsArray.getJSONObject(i);
-				
-				System.out.println("jsonTagsObject: " + jsonTagsObject.getJSONArray("results"));
-				
-				JSONArray resultsArray = jsonTagsObject.getJSONArray("results");
-				for (int j=0; j < resultsArray.length(); j++) {
-					JSONObject jsonValueObject = resultsArray.getJSONObject(j);
-					
-					System.out.println("jsonValueObject: " + jsonValueObject.getJSONArray("values"));
-					
-					for (int k = 0; k < jsonValueObject.getJSONArray("values").length(); k++) {
-						JSONArray jsonArray = jsonValueObject.getJSONArray("values").getJSONArray(k);
-						
-						System.out.println("value - 1 : " + jsonArray.get(0) + "value - 2: " + jsonArray.get(1) + "value - 3: " + jsonArray.get(2));
+		} else if (tag.equalsIgnoreCase("data")) {
+			String dataPoints = retrieveDataPoints(authorization);
+			//log.info("TimeseriesServiceImpl :: retrieveDataPoints : response - " + dataPoints);
+
+			try {
+				JSONObject dataPointsObject = new JSONObject(dataPoints);
+
+				JSONArray tagsArray = dataPointsObject.getJSONArray("tags");
+				System.out.println("tagsArray: " + tagsArray);
+
+				for (int i = 0; i < tagsArray.length(); i++) {
+					JSONObject jsonTagsObject = tagsArray.getJSONObject(i);
+
+					System.out.println("jsonTagsObject: " + jsonTagsObject.getJSONArray("results"));
+
+					JSONArray resultsArray = jsonTagsObject.getJSONArray("results");
+					for (int j = 0; j < resultsArray.length(); j++) {
+						JSONObject jsonValueObject = resultsArray.getJSONObject(j);
+
+						System.out.println("jsonValueObject: " + jsonValueObject.getJSONArray("values"));
+
+						for (int k = 0; k < jsonValueObject.getJSONArray("values").length(); k++) {
+							JSONArray jsonArray = jsonValueObject.getJSONArray("values").getJSONArray(k);
+
+							System.out.println("value - 1 : " + jsonArray.get(0) + "value - 2: " + jsonArray.get(1)
+									+ "value - 3: " + jsonArray.get(2));
+						}
 					}
 				}
+				
+				return dataPointsObject.toString();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
         
-        
-        
+        return "No DATA FOUND";
 	}
 	
-	private static String retrieveDataPoints(String authorization) {
+	private String retrieveDataPoints(String authorization) {
 		
 		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints";
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Predix-Zone-Id","d486a10a-44e2-43a2-939e-d2852a02c9ef");
+        headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
         headers.add("Authorization", authorization);
         headers.add("Content-Type", "application/json");
         
 //	    JSONObject jsonString = buildJson();
         String body ="{"+
 
-         		" 'start': '6d-ago'" + "," +
+         		" 'start': '1d-ago'" + "," +
 
     			" 'tags': [ "+
 
         		" {"+
 
-            		" 'name': '9d8c62f3_cutter',"+
+            		" 'name': 'LOCOMOTIVE_1_rpm',"+
 
             		" 'limit': 3"+
 
@@ -121,14 +157,14 @@ public class TimeseriesServiceImpl {
 		return null;
 	}
 
-	private static String retrieveTags(String authorization) {
+	private  String retrieveTags(String authorization) {
 		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/tags";
         
         
         RestTemplate restTemplate = new RestTemplate();
         
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Predix-Zone-Id","d486a10a-44e2-43a2-939e-d2852a02c9ef");
+        headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
         headers.add("Authorization", authorization);
         headers.add("Content-Type", "application/json");
         log.info("TimeseriesServiceImpl :: retrieveTags : headers - " +  headers);
