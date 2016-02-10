@@ -1,0 +1,4 @@
+---
+applications:
+- name: locomotive-simulator-service
+  path: target/locomotive-data-simulator-1.2.0.jar
