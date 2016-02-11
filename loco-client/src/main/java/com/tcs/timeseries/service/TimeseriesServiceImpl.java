@@ -133,9 +133,9 @@ public class TimeseriesServiceImpl {
 
         		" {"+
 
-            		" 'name': 'LOCOMOTIVE_1_rpm',"+
+            		" 'name': ['LOCOMOTIVE_1_location', 'LOCOMOTIVE_1_rpm', 'LOCOMOTIVE_1_torque'],"+
 
-            		" 'limit': 3"+
+            		" 'limit': 100"+
 
             	" }]}";
 		MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<String, String>();
