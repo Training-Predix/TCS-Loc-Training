@@ -1,0 +1,84 @@
+[
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_1",
+    "type": "Diesel-electric",
+    "model": "ES44AC",
+    "serial_no": "LOCOMOTIVE_1",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-1",
+    "manufacturer": "GE",
+    "engine": "/engines/v12-1",
+    "installedOn": "01/12/2005",
+    "dateIso": "2005-12-01T13:15:31Z"
+  },
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_2",
+    "type": "Diesel-electric",
+    "model": "SD70ACe",
+    "serial_no": "LOCOMOTIVE_2",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-1",
+    "manufacturer": "/manufacturers/electro-motive-diesel",
+    "engine": "/engines/v16-2-1"
+  },
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_3",
+    "type": "Diesel-electric",
+    "model": "ES44AC",
+    "serial_no": "LOCOMOTIVE_3",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-1",
+    "manufacturer": "/manufacturers/GE",
+    "engine": "/engines/v12-2",
+    "installedOn": "02/12/2005",
+    "dateIso": "2005-12-02T13:15:31Z"
+  },
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_4",
+    "type": "Diesel-electric",
+    "model": "AD40SPe",
+    "serial_no": "LOCOMOTIVE_4",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-2",
+    "manufacturer": "/manufacturers/electro-motive-diesel",
+    "engine": "/engines/v16-2-2"
+  },
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_5",
+    "type": "Diesel-electric",
+    "model": "ES44AC",
+    "serial_no": "LOCOMOTIVE_5",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-2",
+    "manufacturer": "/manufacturers/GE",
+    "engine": "/engines/v12-3",
+    "installedOn": "10/12/2005",
+    "dateIso": "2005-12-10T13:15:31Z"
+  },
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_6",
+    "type": "Diesel-electric",
+    "model": "SD70ACe",
+    "serial_no": "LOCOMOTIVE_6",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-2",
+    "manufacturer": "/manufacturers/electro-motive-diesel",
+    "engine": "/engines/v16-2-3",
+    "installedOn": "11/12/2005",
+    "dateIso": "2005-12-11T13:15:31Z"
+  },
+  {
+    "uri": "/locomotiveengine/LOCOMOTIVE_7",
+    "type": "Diesel-electric",
+    "model": "ES44AC",
+    "serial_no": "LOCOMOTIVE_7",
+    "emission_tier": "0+",
+    "fleet": "/fleets/up-3",
+    "manufacturer": "/manufacturers/GE",
+    "engine": "/engines/v12-4",
+    "installedOn": "12/12/2005",
+    "dateIso": "2005-12-12T13:15:31Z"
+  }
+]
+
+
