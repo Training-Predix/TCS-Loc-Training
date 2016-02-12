@@ -1,13 +1,13 @@
 ---
 applications:
-  - name: predix-seed
+  - name: locomotive-predix-seed
     buildpack: predix_openresty_buildpack
     path: dist
     memory: 64M
     stack: cflinuxfs2
     services:
-            - your_redis_instance # change this to your redis service instance name
-            - your_view_service_instance # change this to your view service instance name
+            - locomotive-redis # change this to your redis service instance name
+            - locomotive_views # change this to your view service instance name
     env:
-      UAA_SERVER_URL: https://your-uaa-instance.grc-apps.svc.ice.ge.com # change to your UAA instance url
-      REDIS: redis
+      UAA_SERVER_URL: https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io # change to your UAA instance url
+      REDIS: redis-1
