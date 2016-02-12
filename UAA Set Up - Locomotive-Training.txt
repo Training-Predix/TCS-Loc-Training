@@ -126,3 +126,78 @@ Result:
   displayname: predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user
 [predix@localhost ~]$ uaac member add predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user geuser
 success
+
+
+
+
+16. -- create redis service
+cf cs redis-1 shared-vm locomotive-redis
+
+Result:
+
+[predix@localhost ~]$ cf cs redis-1 shared-vm locomotive-redis
+Creating service instance locomotive-redis in org Predix-Training / space Training3 as student75...
+OK
+
+
+17. -- create view service
+cf create-service predix-views Standard locomotive_views -c '{"trustedIssuerIds":["https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token"]}'
+
+Result:
+
+[predix@localhost ~]$ cf create-service predix-views Standard locomotive_views -c '{"trustedIssuerIds":["https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token"]}'
+Creating service instance locomotive_views in org Predix-Training / space Training3 as student75...
+OK
+
+
+18. -- bind view service:
+
+cf bs locomotive-predix-seed locomotive_views
+
+Result:
+
+[predix@localhost ~]$ cf bs locomotive-predix-seed locomotive_views
+Binding service locomotive_views to app locomotive-predix-seed in org Predix-Training / space Training3 as student75...
+OK
+TIP: Use 'cf restage locomotive-predix-seed' to ensure your env variable changes take effect
+
+
+19. -- add view zone group
+
+-- login to the client token before performing add group and member actions
+
+uaac token client get admin
+uaac client get client
+
+uaac group add views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user
+
+Result:
+
+[predix@localhost ~]$ uaac group add views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user
+  meta
+    version: 0
+    created: 2016-02-12T19:06:37.564Z
+    lastmodified: 2016-02-12T19:06:37.564Z
+  schemas: urn:scim:schemas:core:1.0
+  id: 93f3c295-e84d-4c70-b713-7e933997caa9
+  displayname: views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user
+
+
+20. -- add view zone to member - geuser
+uaac member add views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user geuser
+
+Result:
+
+[predix@localhost ~]$ uaac member add views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user geuser
+success
+
+21. -- verify the user access
+uaac user get geuser
+
+22. -- update client authorities with view zone
+
+uaac client update client --authorities "acs.policies.write clients.secret uaa.resource timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user acs.attributes.write clients.admin scim.read acs.policies.read timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest clients.write idps.read scim.write views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user"
+
+23. -- verify client scope and authorities
+
+uaac client get client
