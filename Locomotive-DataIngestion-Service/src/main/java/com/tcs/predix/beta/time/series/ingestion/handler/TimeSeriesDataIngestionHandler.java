@@ -98,7 +98,8 @@ public class TimeSeriesDataIngestionHandler extends BaseFactoryIT
 		    this.timeSeriesFactory.create(longBuilder(json));
 		     // --> pump lat data
 		    this.timeSeriesFactory.create(latBuilder(json));
-        	log.info("WebSocket URL : " + this.wsConfig.getPredixWebSocketURI());
+		    
+/*        	log.info("WebSocket URL : " + this.wsConfig.getPredixWebSocketURI());
 
             
 			try {
@@ -107,7 +108,7 @@ public class TimeSeriesDataIngestionHandler extends BaseFactoryIT
 				
 			} catch (Exception e) {
 				e.printStackTrace();				
-			}
+			}*/
             
             // calculate and submit data to postgres
             

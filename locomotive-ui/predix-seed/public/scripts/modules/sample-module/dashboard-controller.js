@@ -2,7 +2,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
     'use strict';
 
     // Controller definition
-    controllers.controller('DashboardsCtrl', ['$scope', '$log', 'PredixAssetService', 'PredixViewService', function ($scope, $log, PredixAssetService, PredixViewService) {
+    controllers.controller('DashboardsCtrl', ['$scope', '$log', 'PredixAssetService', 'PredixViewService','$http','$interval', function ($scope, $log, PredixAssetService, PredixViewService,$http,$interval) {
 
         PredixAssetService.getAssetsByParentId('root').then(function (initialContext) {
 
@@ -11,12 +11,54 @@ define(['angular', './sample-module'], function (angular, controllers) {
             $scope.initialContexts = initialContext;
             $scope.initialContextName = initialContext.data[0].name;
 
+            
+            
+            
+            
+            
+            
             //load view selector
             $scope.openContext($scope.initialContexts.data[0]);
         }, function (message) {
             $log.error(message);
         });
 
+        //start here Romit--------------------------------------------------------------------------------------------------
+        
+        $scope.decks = [];
+        
+        
+        /*$scope.getAllEntries=function (ob)
+        {
+
+         cargos=cargoCondition;
+          console.log("cargo"+cargoCondition.length);
+           var httpRequest = $http({
+             method: 'GET',
+             url:'http://http://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/datapoints',
+             headers: {
+                  'Content-Type':'application/json'
+                      }
+          
+         }).success(function(data) {
+
+          shelfdata=data;
+          console.log("found shelfdata" +shelfdata);
+          
+
+          });
+       
+         
+        };*/
+
+        
+        
+        
+        
+        //end here Romit------------------------------------------------------------------------------------------------------
+        
+        
+        
         $scope.decks = [];
         $scope.selectedDeckUrl = null;
 
