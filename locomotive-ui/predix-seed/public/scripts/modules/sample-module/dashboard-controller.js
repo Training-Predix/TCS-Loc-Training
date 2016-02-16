@@ -10,12 +10,8 @@ define(['angular', './sample-module'], function (angular, controllers) {
             initialContext.data[0].selectedAsset = true;
             $scope.initialContexts = initialContext;
             $scope.initialContextName = initialContext.data[0].name;
-
-            
-            
-            
-            
-            
+      
+                 
             
             //load view selector
             $scope.openContext($scope.initialContexts.data[0]);
@@ -25,35 +21,32 @@ define(['angular', './sample-module'], function (angular, controllers) {
 
         //start here Romit--------------------------------------------------------------------------------------------------
         
-        $scope.decks = [];
-        
-        
-        /*$scope.getAllEntries=function (ob)
-        {
+        $scope.allTorqueDeatils=[];
+        $scope.entry=0;  
+        var alldata;
 
-         cargos=cargoCondition;
-          console.log("cargo"+cargoCondition.length);
+        
+        $scope.getAllEntries=function (ob)
+        {         
            var httpRequest = $http({
              method: 'GET',
-             url:'http://http://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/datapoints',
+             url:'http://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/datapoints',
              headers: {
                   'Content-Type':'application/json'
                       }
           
-         }).success(function(data) {
+         }).success(function(data) {  
+        	 
+          alldata= data;
+          $scope.allTorqueDeatils=data;
+          $scope.entry=$scope.allTorqueDeatils.length;         
 
-          shelfdata=data;
-          console.log("found shelfdata" +shelfdata);
-          
-
-          });
-       
+          }); 
          
-        };*/
-
+        };
         
         
-        
+        $interval($scope.getAllEntries, 1000*3);      
         
         //end here Romit------------------------------------------------------------------------------------------------------
         
