@@ -30,7 +30,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
         {         
            var httpRequest = $http({
              method: 'GET',
-             url:'http://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/datapoints',
+             url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/datapoints',
              headers: {
                   'Content-Type':'application/json'
                       }
@@ -46,7 +46,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
         };
         
         
-        $interval($scope.getAllEntries, 1000*3);      
+        $interval($scope.getAllEntries, 1000*2);      
         
         //end here Romit------------------------------------------------------------------------------------------------------
         

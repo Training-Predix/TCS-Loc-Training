@@ -45,8 +45,7 @@ public class TimeseriesServiceImpl {
 	
 	
 	public String timeseries(String tag) {
-		
-		
+
 		boolean oauthClientIdEncode = true;
 		String oauthPort = "80";
 		String oauthGrantType = "client_credentials";
@@ -61,20 +60,20 @@ public class TimeseriesServiceImpl {
 				proxyHost, proxyPort);
 
 		log.debug("TOKEN = " + tokenString);
-		
+
 		JSONObject token = new JSONObject(tokenString);
 
-        
-        String authorization = "Bearer " +token.getString("access_token");
-        
+		String authorization = "Bearer " + token.getString("access_token");
+
 		if (tag.equalsIgnoreCase("tags")) {
 			String tags = retrieveTags(authorization);
 			log.info("TimeseriesServiceImpl :: retrieveTags : response - " + tags);
 			return tags;
-			
+
 		} else if (tag.equalsIgnoreCase("data")) {
 			String dataPoints = retrieveDataPoints(authorization);
-			//log.info("TimeseriesServiceImpl :: retrieveDataPoints : response - " + dataPoints);
+			// log.info("TimeseriesServiceImpl :: retrieveDataPoints : response
+			// - " + dataPoints);
 
 			try {
 				JSONObject dataPointsObject = new JSONObject(dataPoints);
@@ -101,16 +100,27 @@ public class TimeseriesServiceImpl {
 						}
 					}
 				}
-				
+
 				return dataPointsObject.toString();
-				
+
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else if (tag.equalsIgnoreCase("latest")) {
+			String latestPoints = retrieveLatestPoints(authorization);
+
+			try {
+				JSONObject latestPointsObject = new JSONObject(latestPoints);
+				return latestPointsObject.toString();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-        
-        return "No DATA FOUND";
+
+		return "No DATA FOUND";
 	}
 	
 	private String retrieveDataPoints(String authorization) {
@@ -124,7 +134,7 @@ public class TimeseriesServiceImpl {
         headers.add("Authorization", authorization);
         headers.add("Content-Type", "application/json");
         
-//	    JSONObject jsonString = buildJson();
+
         String body ="{"+
 
          		" 'start': '1d-ago'" + "," +
@@ -185,25 +195,49 @@ public class TimeseriesServiceImpl {
 	    return null;
 	}
 	
-//	private static JSONObject buildJson() {
-//		JSONObject item = new JSONObject();
-//		
-//		JSONArray array = new JSONArray();
-//		JSONObject tags = new JSONObject();
-//		try {
-//			item.append("start", "4d-ago");
-//			tags.put("name", "9d8c62f3_currentamp");
-//			tags.put("limit", 1000);
-//			//array.put(item);
-//			
-//			item.append("tags", tags);
-//		} catch (JSONException e) {
-//			log.info("Error occurred while building json object");
-//		}		
-//		
-//		return item;
-//		
-//	}
+private String retrieveLatestPoints(String authorization) {
+		
+		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints/latest";
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
+        headers.add("Authorization", authorization);
+        headers.add("Content-Type", "application/json");
+        
+        String body ="{"+
+
+         		" 'start': '1d-ago'" + "," +
+
+    			" 'tags': [ "+
+
+        		" {"+
+
+            		" 'name': ['LOCOMOTIVE_1_location', 'LOCOMOTIVE_1_rpm', 'LOCOMOTIVE_1_torque']"+
+
+            		
+
+            	" }]}";
+		MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<String, String>();
+		postParameters.add("content", body);
+		
+		try {
+			
+			//HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(postParameters, headers);
+			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
+			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity, String.class);
+			
+			log.info("TimeseriesServiceImpl :: retrieveLatestPoints : response ==============================> " +  response.getBody());
+			
+			return response.getBody();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 	
 
 

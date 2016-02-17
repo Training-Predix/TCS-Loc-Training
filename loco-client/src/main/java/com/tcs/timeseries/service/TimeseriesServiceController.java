@@ -34,5 +34,16 @@ public class TimeseriesServiceController {
 
 		return str1;
 	}
+	
+	
+	@RequestMapping(value = "/locomotive/latest", method = RequestMethod.GET)
+	public String retrieveLatest() {
+
+		log.info("TimeseriesServiceController: retrieveLatest ");
+
+		String str1 = tsimpl.timeseries("latest");
+
+		return str1;
+	}
 
 }
