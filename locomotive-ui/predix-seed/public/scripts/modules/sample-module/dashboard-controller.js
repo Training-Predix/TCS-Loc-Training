@@ -21,9 +21,11 @@ define(['angular', './sample-module'], function (angular, controllers) {
 
         //start here Romit--------------------------------------------------------------------------------------------------
         
-        $scope.allTorqueDeatils=[];
+        $scope.allTorqueDetails=[];
         $scope.entry=0;  
-        var alldata;
+        var alldata; 
+        $scope.data=[];
+        
 
         
         $scope.getAllEntries=function (ob)
@@ -38,8 +40,12 @@ define(['angular', './sample-module'], function (angular, controllers) {
          }).success(function(data) {  
         	 
           alldata= data;
-          $scope.allTorqueDeatils=data;
-          $scope.entry=$scope.allTorqueDeatils.length;         
+          $scope.allTorqueDetails=data.tags;
+          
+          console.log($scope.allTorqueDetails);
+          $scope.entry=$scope.allTorqueDetails.length;    
+         
+          
 
           }); 
          
