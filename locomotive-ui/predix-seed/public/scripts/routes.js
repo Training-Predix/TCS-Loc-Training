@@ -40,6 +40,11 @@ define(['angular', 'angular-ui-router'], function(angular) {
                 templateUrl: 'views/chart-page.html',
                 controller: 'ChartCtrl'
             })
+            .state('asset', {
+                url: '/asset',
+                templateUrl: 'views/asset.html',
+                controller: 'AssetCtrl'              
+            })
             .state('blanksubpage', {
                 url: '/blanksubpage',
                 templateUrl: 'views/blank-sub-page.html'

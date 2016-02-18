@@ -40,6 +40,7 @@ define([
             session: {},
             tabs: [
                 {icon: 'fa-tachometer', state: 'dashboards', label: 'Dashboards'},
+                {icon: 'fa-th', state: 'asset', label: 'Asset'},
                 {icon: 'fa-th', state: 'chartpage', label: 'DataGraph'}
                 /*{icon: 'fa-file-o', state: 'blankpage', label: 'Blank Page', subitems: [
                     {state: 'blanksubpage', label: 'Blank Sub Page'}
