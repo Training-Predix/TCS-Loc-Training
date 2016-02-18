@@ -33,13 +33,13 @@ define(['angular', './sample-module'], function (angular, controllers) {
         
         var httpRequest = $http({
             method: 'GET',
-            url:'/api/locomotive'
-            /*url:'https://predix-asset.run.aws-usw02-pr.ice.predix.io/locomotive',
+//            url:'/api/locomotive'
+            url:'https://predix-asset.run.aws-usw02-pr.ice.predix.io/locomotive',
             headers: {
                  'Content-Type':'application/json',
                  'Predix-Zone-Id': '643df68c-cb16-4f04-8abd-5e87a02ca185',
                  'Authorization':'Bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIzYWRjZmMyMS0zZmQ5LTQ3YmItOGEyYy1kYmMyYzg5OTVlNzgiLCJzdWIiOiJjbGllbnQiLCJzY29wZSI6WyJhY3MucG9saWNpZXMud3JpdGUiLCJjbGllbnRzLnNlY3JldCIsInVhYS5yZXNvdXJjZSIsInRpbWVzZXJpZXMuem9uZXMuMzRkMmVjZTgtNWZhYS00MGFjLWFlODktM2E2MTRhYTAwYjZlLnF1ZXJ5IiwicHJlZGl4LWFzc2V0LnpvbmVzLjY0M2RmNjhjLWNiMTYtNGYwNC04YWJkLTVlODdhMDJjYTE4NS51c2VyIiwiYWNzLmF0dHJpYnV0ZXMud3JpdGUiLCJjbGllbnRzLmFkbWluIiwic2NpbS5yZWFkIiwiYWNzLnBvbGljaWVzLnJlYWQiLCJ0aW1lc2VyaWVzLnpvbmVzLjM0ZDJlY2U4LTVmYWEtNDBhYy1hZTg5LTNhNjE0YWEwMGI2ZS51c2VyIiwidGltZXNlcmllcy56b25lcy4zNGQyZWNlOC01ZmFhLTQwYWMtYWU4OS0zYTYxNGFhMDBiNmUuaW5nZXN0Iiwidmlld3Muem9uZXMuODZhOTRiMmItZGM1ZC00OWU1LWEwNTAtZGNhODVmNTA2MTYzLnVzZXIiLCJjbGllbnRzLndyaXRlIiwiaWRwcy5yZWFkIiwic2NpbS53cml0ZSJdLCJjbGllbnRfaWQiOiJjbGllbnQiLCJjaWQiOiJjbGllbnQiLCJhenAiOiJjbGllbnQiLCJncmFudF90eXBlIjoiY2xpZW50X2NyZWRlbnRpYWxzIiwicmV2X3NpZyI6IjJiYzVhOTJlIiwiaWF0IjoxNDU1ODE4NjE4LCJleHAiOjE0NTU4NjE4MTgsImlzcyI6Imh0dHBzOi8vMzI4ZWEwMDQtZjNkMi00NjRiLWJiZjgtOGFjYmQ1ZmE0NTc1LnByZWRpeC11YWEtdHJhaW5pbmcucnVuLmF3cy11c3cwMi1wci5pY2UucHJlZGl4LmlvL29hdXRoL3Rva2VuIiwiemlkIjoiMzI4ZWEwMDQtZjNkMi00NjRiLWJiZjgtOGFjYmQ1ZmE0NTc1IiwiYXVkIjpbImNsaWVudCIsImFjcy5wb2xpY2llcyIsImNsaWVudHMiLCJ1YWEiLCJ0aW1lc2VyaWVzLnpvbmVzLjM0ZDJlY2U4LTVmYWEtNDBhYy1hZTg5LTNhNjE0YWEwMGI2ZSIsInByZWRpeC1hc3NldC56b25lcy42NDNkZjY4Yy1jYjE2LTRmMDQtOGFiZC01ZTg3YTAyY2ExODUiLCJhY3MuYXR0cmlidXRlcyIsInNjaW0iLCJ2aWV3cy56b25lcy44NmE5NGIyYi1kYzVkLTQ5ZTUtYTA1MC1kY2E4NWY1MDYxNjMiLCJpZHBzIl19.Ig32Rg3ZTmvSS2cHLgTAOqAK22NjE7fvgHlzV8g8g69UMM34m60aSnmYpvyUOe80dmJuPrmj1x7EFh9twc5sGMic4BJEiAWt8y0GWR7ACFQIlHiru9pAy6Jik0JvNowwG-q0b9w4tUlS3IfAqIIPZmzHR01P0sbiIlAYHgKVfK92n9P4DzpjcbH-B_sq-2UvGKdSQyQd6C0PW6yTWHFXt6W5ZRDpNxA920M1sEChvDpEZTBoY3P8yq3EJupF2ls_7gfXHz20eSI86PUcNjeKb7h31iX36zW3FCXzA6zvL2wZ-39-j2yOuoEcF32228Ef7YqFrwugHMe6OX2LWxattw'
-                     }*/
+                     }
 
         }).success(function(data) {
         	

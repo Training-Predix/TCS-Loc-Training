@@ -24,7 +24,14 @@ define(['angular', './sample-module'], function (angular, controllers) {
         $scope.allTorqueDetails=[];
         $scope.entry=0;  
         var alldata; 
-        $scope.data=[];
+        $scope.locdata=[];
+        $scope.rpmdata=[];
+        $scope.tordata=[];
+        $scope.locname = null;
+        $scope.rpmname = null;
+        $scope.torname = null;
+        
+        
         
 
         
@@ -42,7 +49,19 @@ define(['angular', './sample-module'], function (angular, controllers) {
           alldata= data;
           $scope.allTorqueDetails=data.tags;
           
-          console.log($scope.allTorqueDetails);
+          $scope.locdata=data.tags[0].results[0].values[0];
+          $scope.rpmdata=data.tags[1].results[0].values[0];
+          $scope.tordata=data.tags[2].results[0].values[0];
+          
+          $scope.locname=data.tags[0].name;
+          $scope.rpmname=data.tags[1].name;
+          $scope.torname=data.tags[2].name;
+          
+          
+          console.log($scope.locdata);
+          console.log($scope.rpmdata);
+          console.log($scope.tordata);
+          
           $scope.entry=$scope.allTorqueDetails.length;    
          
           
