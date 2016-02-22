@@ -2,7 +2,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
     'use strict';
 
     // Controller definition
-    controllers.controller('AssetCtrl', ['$scope', '$log', '$http', '$location', 'PredixAssetService', 'PredixViewService', function ($scope, $log, $http, $location, PredixAssetService, PredixViewService) {
+    controllers.controller('AssetCtrl', ['$scope', '$log', '$http', '$location','$state','PredixAssetService', 'PredixViewService', function ($scope, $log, $http, $location, $state, PredixAssetService, PredixViewService) {
 
 //        PredixAssetService.getAssetsByParentId('root').then(function (initialContext) {
 //
@@ -29,17 +29,17 @@ define(['angular', './sample-module'], function (angular, controllers) {
 //                        {name:'Kai',country:'Denmark'}
 //                    ];
         
-        //https://predix-asset.run.aws-usw02-pr.ice.predix.io/locomotive/LOCOMOTIVE_1
+        //N.B: Commnet the url part when pushing to cloud
         
         var httpRequest = $http({
             method: 'GET',
-//            url:'/api/locomotive'
-            url:'https://predix-asset.run.aws-usw02-pr.ice.predix.io/locomotive',
+            url:'/api/locomotive'
+  /*          url:'https://predix-asset.run.aws-usw02-pr.ice.predix.io/locomotive',
             headers: {
                  'Content-Type':'application/json',
                  'Predix-Zone-Id': '643df68c-cb16-4f04-8abd-5e87a02ca185',
-                 'Authorization':'Bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIzYWRjZmMyMS0zZmQ5LTQ3YmItOGEyYy1kYmMyYzg5OTVlNzgiLCJzdWIiOiJjbGllbnQiLCJzY29wZSI6WyJhY3MucG9saWNpZXMud3JpdGUiLCJjbGllbnRzLnNlY3JldCIsInVhYS5yZXNvdXJjZSIsInRpbWVzZXJpZXMuem9uZXMuMzRkMmVjZTgtNWZhYS00MGFjLWFlODktM2E2MTRhYTAwYjZlLnF1ZXJ5IiwicHJlZGl4LWFzc2V0LnpvbmVzLjY0M2RmNjhjLWNiMTYtNGYwNC04YWJkLTVlODdhMDJjYTE4NS51c2VyIiwiYWNzLmF0dHJpYnV0ZXMud3JpdGUiLCJjbGllbnRzLmFkbWluIiwic2NpbS5yZWFkIiwiYWNzLnBvbGljaWVzLnJlYWQiLCJ0aW1lc2VyaWVzLnpvbmVzLjM0ZDJlY2U4LTVmYWEtNDBhYy1hZTg5LTNhNjE0YWEwMGI2ZS51c2VyIiwidGltZXNlcmllcy56b25lcy4zNGQyZWNlOC01ZmFhLTQwYWMtYWU4OS0zYTYxNGFhMDBiNmUuaW5nZXN0Iiwidmlld3Muem9uZXMuODZhOTRiMmItZGM1ZC00OWU1LWEwNTAtZGNhODVmNTA2MTYzLnVzZXIiLCJjbGllbnRzLndyaXRlIiwiaWRwcy5yZWFkIiwic2NpbS53cml0ZSJdLCJjbGllbnRfaWQiOiJjbGllbnQiLCJjaWQiOiJjbGllbnQiLCJhenAiOiJjbGllbnQiLCJncmFudF90eXBlIjoiY2xpZW50X2NyZWRlbnRpYWxzIiwicmV2X3NpZyI6IjJiYzVhOTJlIiwiaWF0IjoxNDU1ODE4NjE4LCJleHAiOjE0NTU4NjE4MTgsImlzcyI6Imh0dHBzOi8vMzI4ZWEwMDQtZjNkMi00NjRiLWJiZjgtOGFjYmQ1ZmE0NTc1LnByZWRpeC11YWEtdHJhaW5pbmcucnVuLmF3cy11c3cwMi1wci5pY2UucHJlZGl4LmlvL29hdXRoL3Rva2VuIiwiemlkIjoiMzI4ZWEwMDQtZjNkMi00NjRiLWJiZjgtOGFjYmQ1ZmE0NTc1IiwiYXVkIjpbImNsaWVudCIsImFjcy5wb2xpY2llcyIsImNsaWVudHMiLCJ1YWEiLCJ0aW1lc2VyaWVzLnpvbmVzLjM0ZDJlY2U4LTVmYWEtNDBhYy1hZTg5LTNhNjE0YWEwMGI2ZSIsInByZWRpeC1hc3NldC56b25lcy42NDNkZjY4Yy1jYjE2LTRmMDQtOGFiZC01ZTg3YTAyY2ExODUiLCJhY3MuYXR0cmlidXRlcyIsInNjaW0iLCJ2aWV3cy56b25lcy44NmE5NGIyYi1kYzVkLTQ5ZTUtYTA1MC1kY2E4NWY1MDYxNjMiLCJpZHBzIl19.Ig32Rg3ZTmvSS2cHLgTAOqAK22NjE7fvgHlzV8g8g69UMM34m60aSnmYpvyUOe80dmJuPrmj1x7EFh9twc5sGMic4BJEiAWt8y0GWR7ACFQIlHiru9pAy6Jik0JvNowwG-q0b9w4tUlS3IfAqIIPZmzHR01P0sbiIlAYHgKVfK92n9P4DzpjcbH-B_sq-2UvGKdSQyQd6C0PW6yTWHFXt6W5ZRDpNxA920M1sEChvDpEZTBoY3P8yq3EJupF2ls_7gfXHz20eSI86PUcNjeKb7h31iX36zW3FCXzA6zvL2wZ-39-j2yOuoEcF32228Ef7YqFrwugHMe6OX2LWxattw'
-                     }
+                 'Authorization':'Bearer eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJjMjNjYzI1ZC02ZjRjLTRlMjgtYTA2Zi03MzVkYmQxNTNjMGIiLCJzdWIiOiJjbGllbnQiLCJzY29wZSI6WyJhY3MucG9saWNpZXMud3JpdGUiLCJjbGllbnRzLnNlY3JldCIsInVhYS5yZXNvdXJjZSIsInRpbWVzZXJpZXMuem9uZXMuMzRkMmVjZTgtNWZhYS00MGFjLWFlODktM2E2MTRhYTAwYjZlLnF1ZXJ5IiwicHJlZGl4LWFzc2V0LnpvbmVzLjY0M2RmNjhjLWNiMTYtNGYwNC04YWJkLTVlODdhMDJjYTE4NS51c2VyIiwiYWNzLmF0dHJpYnV0ZXMud3JpdGUiLCJjbGllbnRzLmFkbWluIiwic2NpbS5yZWFkIiwiYWNzLnBvbGljaWVzLnJlYWQiLCJ0aW1lc2VyaWVzLnpvbmVzLjM0ZDJlY2U4LTVmYWEtNDBhYy1hZTg5LTNhNjE0YWEwMGI2ZS51c2VyIiwidGltZXNlcmllcy56b25lcy4zNGQyZWNlOC01ZmFhLTQwYWMtYWU4OS0zYTYxNGFhMDBiNmUuaW5nZXN0Iiwidmlld3Muem9uZXMuODZhOTRiMmItZGM1ZC00OWU1LWEwNTAtZGNhODVmNTA2MTYzLnVzZXIiLCJjbGllbnRzLndyaXRlIiwiaWRwcy5yZWFkIiwic2NpbS53cml0ZSJdLCJjbGllbnRfaWQiOiJjbGllbnQiLCJjaWQiOiJjbGllbnQiLCJhenAiOiJjbGllbnQiLCJncmFudF90eXBlIjoiY2xpZW50X2NyZWRlbnRpYWxzIiwicmV2X3NpZyI6IjJiYzVhOTJlIiwiaWF0IjoxNDU2MTY0MTUzLCJleHAiOjE0NTYyMDczNTMsImlzcyI6Imh0dHBzOi8vMzI4ZWEwMDQtZjNkMi00NjRiLWJiZjgtOGFjYmQ1ZmE0NTc1LnByZWRpeC11YWEtdHJhaW5pbmcucnVuLmF3cy11c3cwMi1wci5pY2UucHJlZGl4LmlvL29hdXRoL3Rva2VuIiwiemlkIjoiMzI4ZWEwMDQtZjNkMi00NjRiLWJiZjgtOGFjYmQ1ZmE0NTc1IiwiYXVkIjpbImNsaWVudCIsImFjcy5wb2xpY2llcyIsImNsaWVudHMiLCJ1YWEiLCJ0aW1lc2VyaWVzLnpvbmVzLjM0ZDJlY2U4LTVmYWEtNDBhYy1hZTg5LTNhNjE0YWEwMGI2ZSIsInByZWRpeC1hc3NldC56b25lcy42NDNkZjY4Yy1jYjE2LTRmMDQtOGFiZC01ZTg3YTAyY2ExODUiLCJhY3MuYXR0cmlidXRlcyIsInNjaW0iLCJ2aWV3cy56b25lcy44NmE5NGIyYi1kYzVkLTQ5ZTUtYTA1MC1kY2E4NWY1MDYxNjMiLCJpZHBzIl19.M6kVkREYm6gZVfqykah4HCSd1PSp_Zt0OaG_0-JTAZ1v9JSWuJRXBDa8EUhIKzsEZHLfKQ89qyupY4wnOoNb5QrEVNcGh1oz6KTGRfMTalliBUOaMOOuYHwf6szkQbj0Yk8fIAQHqOfZEL1k-b46qDbpu0C7WIuU2BU_4PHJmoVrvCnk9ESezHcvLo0OoaW5V1CNZ2VaBJh7ls2mBQ9MZS3dERtOkMqSkgDNKGp-gNmTv9RMQBuFNgVESekfZ5vx8RKtiogNIr9a2E04B1W_XUYgKOFKaJD50wSdn85jJSXSDYmymssWEORLdk6AA_mW6NEenmBh6Y5PYugaPmSuCA'
+                     }*/
 
         }).success(function(data) {
         	
@@ -51,7 +51,10 @@ define(['angular', './sample-module'], function (angular, controllers) {
         	for (var i=0; i < $scope.allLocomotiveDetails.length; i++ ) {
         		
         		console.log($scope.allLocomotiveDetails[i]["serial_no"]);
-        		if ($scope.allLocomotiveDetails[i]["serial_no"] == 'LOCOMOTIVE_1') {
+        		if ($scope.allLocomotiveDetails[i]["serial_no"] == 'LOCOMOTIVE_1'
+        			||$scope.allLocomotiveDetails[i]["serial_no"] == 'LOCOMOTIVE_2')
+        		{
+        			
         			$scope.allLocomotiveDetails[i]["showChartDetails"] = false;
         		} else {
         			$scope.allLocomotiveDetails[i]["showChartDetails"] = true;
@@ -64,8 +67,9 @@ define(['angular', './sample-module'], function (angular, controllers) {
         
         $scope.showChart=function(id){
         	console.log("show chart details :: " + id);
+        	$state.go('chartpage', {'id' : id});
         	
-        	$location.path('/chartpage');
+        	//$location.path('/chartpage');
 
         };
 

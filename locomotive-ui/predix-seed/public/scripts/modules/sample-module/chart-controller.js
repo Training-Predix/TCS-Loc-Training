@@ -2,7 +2,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
     'use strict';
 
     // Controller definition
-    controllers.controller('ChartCtrl', ['$scope', '$log', 'PredixAssetService', 'PredixViewService','$http','$interval', function ($scope, $log, PredixAssetService, PredixViewService,$http,$interval) {
+    controllers.controller('ChartCtrl', ['$scope', '$log','$stateParams', 'PredixAssetService', 'PredixViewService','$http','$interval', function ($scope, $log, $stateParams, PredixAssetService, PredixViewService,$http,$interval) {
 
         PredixAssetService.getAssetsByParentId('root').then(function (initialContext) {
 
@@ -43,12 +43,18 @@ define(['angular', './sample-module'], function (angular, controllers) {
         $scope.uprpmdata=[];
         $scope.uptorquedata=[];
        
-        	
+        var id = "LOCOMOTIVE_1";        
+       
+        if($stateParams.id != undefined ){
+        	id = $stateParams.id;
+        }
+       // console.log("id ::::"+id);
         	
         $scope.getUpdates=function(){
         	var httpRequest = $http({
                 method: 'GET',
-                url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest',
+                url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest', 
+                params: {"id": id},
                 headers: {
                      'Content-Type':'application/json'
                          }
@@ -57,6 +63,10 @@ define(['angular', './sample-module'], function (angular, controllers) {
            	 
              
              $scope.allUpdateData=data.tags;
+             console.log("DATA TAGS------>"+data.tags[0]);
+             console.log("DATA RESULTS------>"+data.tags[0].results[0]);
+             console.log("DATA VALUES------>"+data.tags[0].results[0].values[0]);
+             
              locationdata =data.tags[0].results[0].values[0];
              console.log(locationdata);    
              
@@ -133,6 +143,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
            var httpRequest = $http({
              method: 'GET',
              url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest',
+             params: {"id": id},
              headers: {
                   'Content-Type':'application/json'
                       }

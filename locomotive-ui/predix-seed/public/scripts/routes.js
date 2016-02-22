@@ -38,6 +38,7 @@ define(['angular', 'angular-ui-router'], function(angular) {
             .state('chartpage', {
                 url: '/chartpage',
                 templateUrl: 'views/chart-page.html',
+                params:{'id': null},
                 controller: 'ChartCtrl'
             })
             .state('asset', {

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,7 +20,7 @@ public class TimeseriesServiceController {
 
 		log.info("TimeseriesServiceController: retrieveTags ");
 
-		String str = tsimpl.timeseries("tags");
+		String str = tsimpl.timeseries("tags", null);
 
 		return str;
 	}
@@ -30,20 +31,22 @@ public class TimeseriesServiceController {
 
 		log.info("TimeseriesServiceController: retrievedatapoints ");
 
-		String str1 = tsimpl.timeseries("data");
+		String str1 = tsimpl.timeseries("data", null);
 
 		return str1;
 	}
 	
 	
 	@RequestMapping(value = "/locomotive/latest", method = RequestMethod.GET)
-	public String retrieveLatest() {
+	public String retrieveLatest(@RequestParam("id") String id) {
 
 		log.info("TimeseriesServiceController: retrieveLatest ");
 
-		String str1 = tsimpl.timeseries("latest");
+		String str1 = tsimpl.timeseries("latest", id);
 
 		return str1;
 	}
+	
+	
 
 }

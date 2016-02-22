@@ -44,7 +44,7 @@ public class TimeseriesServiceImpl {
 	public  RestClient rest;
 	
 	
-	public String timeseries(String tag) {
+	public String timeseries(String tag, String id) {
 
 		boolean oauthClientIdEncode = true;
 		String oauthPort = "80";
@@ -108,7 +108,7 @@ public class TimeseriesServiceImpl {
 				e.printStackTrace();
 			}
 		} else if (tag.equalsIgnoreCase("latest")) {
-			String latestPoints = retrieveLatestPoints(authorization);
+			String latestPoints = retrieveLatestPoints(authorization , id);
 
 			try {
 				JSONObject latestPointsObject = new JSONObject(latestPoints);
@@ -119,6 +119,7 @@ public class TimeseriesServiceImpl {
 			}
 
 		}
+
 
 		return "No DATA FOUND";
 	}
@@ -195,7 +196,7 @@ public class TimeseriesServiceImpl {
 	    return null;
 	}
 	
-private String retrieveLatestPoints(String authorization) {
+private String retrieveLatestPoints(String authorization, String id) {
 		
 		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints/latest";
 		
@@ -204,8 +205,7 @@ private String retrieveLatestPoints(String authorization) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
         headers.add("Authorization", authorization);
-        headers.add("Content-Type", "application/json");
-        
+        headers.add("Content-Type", "application/json");        
         String body ="{"+
 
          		" 'start': '1d-ago'" + "," +
@@ -214,7 +214,7 @@ private String retrieveLatestPoints(String authorization) {
 
         		" {"+
 
-            		" 'name': ['LOCOMOTIVE_1_location', 'LOCOMOTIVE_1_rpm', 'LOCOMOTIVE_1_torque']"+
+            		" 'name': ['"+id+"_location', '"+id+"_rpm', '"+id+"_torque']"+
 
             		
 
@@ -238,6 +238,10 @@ private String retrieveLatestPoints(String authorization) {
 
 		return null;
 	}
+
+
+
+
 	
 
 
