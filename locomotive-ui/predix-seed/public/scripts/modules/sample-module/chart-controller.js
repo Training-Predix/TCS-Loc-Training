@@ -27,7 +27,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
         $scope.upentry=0;
         var alldata;
         $scope.dataloco =[];
-        
+        var username = document.querySelector('px-login').userInfo.user_name;
         
         
         var xlocaxis=0;
@@ -54,7 +54,8 @@ define(['angular', './sample-module'], function (angular, controllers) {
         	var httpRequest = $http({
                 method: 'GET',
                 url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest', 
-                params: {"id": id},
+                params: {"id": id, "username": username},
+                
                 headers: {
                      'Content-Type':'application/json'
                          }
@@ -143,7 +144,7 @@ define(['angular', './sample-module'], function (angular, controllers) {
            var httpRequest = $http({
              method: 'GET',
              url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest',
-             params: {"id": id},
+             params: {"id": id , "username": username},
              headers: {
                   'Content-Type':'application/json'
                       }

@@ -1,9 +1,12 @@
 package com.tcs.timeseries.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.Header;
 import org.apache.log4j.Logger;
@@ -15,35 +18,46 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2AccessDeniedException;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.ge.predix.solsvc.restclient.impl.RestClient;
 
-
 @Component
 public class TimeseriesServiceImpl {
-	
+
 	private static Logger log = Logger.getLogger(TimeseriesServiceImpl.class);
-	
-	 @PostConstruct
-	    private void init()
-	    {
-		  System.out.println("Test");
-	    }
-	 @PreDestroy
-	 private void destroy()
-	    {
-		  System.out.println("Test");
-	    }
-	
+
+	@PostConstruct
+	private void init() {
+		System.out.println("Test");
+	}
+
+	@PreDestroy
+	private void destroy() {
+		System.out.println("Test");
+	}
+
 	@Autowired
 	@Qualifier("restClient")
-	public  RestClient rest;
+	public RestClient rest;
 	
 	
+	@Autowired
+    private OAuth2Config oauth2;
+	
+	
+	
+	@Autowired
+    private HttpServletRequest context;
+
 	public String timeseries(String tag, String id) {
 
 		boolean oauthClientIdEncode = true;
@@ -108,7 +122,7 @@ public class TimeseriesServiceImpl {
 				e.printStackTrace();
 			}
 		} else if (tag.equalsIgnoreCase("latest")) {
-			String latestPoints = retrieveLatestPoints(authorization , id);
+			String latestPoints = retrieveLatestPoints(authorization, id);
 
 			try {
 				JSONObject latestPointsObject = new JSONObject(latestPoints);
@@ -120,48 +134,50 @@ public class TimeseriesServiceImpl {
 
 		}
 
-
 		return "No DATA FOUND";
 	}
-	
+
 	private String retrieveDataPoints(String authorization) {
-		
+
 		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints";
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-		
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
-        headers.add("Authorization", authorization);
-        headers.add("Content-Type", "application/json");
-        
 
-        String body ="{"+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Predix-Zone-Id", "34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
+		headers.add("Authorization", authorization);
+		headers.add("Content-Type", "application/json");
 
-         		" 'start': '1d-ago'" + "," +
+		String body = "{" +
 
-    			" 'tags': [ "+
+		" 'start': '1d-ago'" + "," +
 
-        		" {"+
+		" 'tags': [ " +
 
-            		" 'name': ['LOCOMOTIVE_1_location', 'LOCOMOTIVE_1_rpm', 'LOCOMOTIVE_1_torque'],"+
+		" {" +
 
-            		" 'limit': 100"+
+		" 'name': ['LOCOMOTIVE_1_location', 'LOCOMOTIVE_1_rpm', 'LOCOMOTIVE_1_torque']," +
 
-            	" }]}";
+		" 'limit': 100" +
+
+		" }]}";
 		MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<String, String>();
 		postParameters.add("content", body);
-		
+
 		try {
-			
-			//HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(postParameters, headers);
+
+			// HttpEntity<MultiValueMap<String, String>> requestEntity = new
+			// HttpEntity<MultiValueMap<String, String>>(postParameters,
+			// headers);
 			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
-			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity, String.class);
-			
-			log.info("TimeseriesServiceImpl :: retrieveDataPoints : response ==============================> " +  response.getBody());
-			
+			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity,
+					String.class);
+
+			log.info("TimeseriesServiceImpl :: retrieveDataPoints : response ==============================> "
+					+ response.getBody());
+
 			return response.getBody();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -169,69 +185,26 @@ public class TimeseriesServiceImpl {
 		return null;
 	}
 
-	private  String retrieveTags(String authorization) {
+	private String retrieveTags(String authorization) {
 		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/tags";
-        
-        
-        RestTemplate restTemplate = new RestTemplate();
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
-        headers.add("Authorization", authorization);
-        headers.add("Content-Type", "application/json");
-        log.info("TimeseriesServiceImpl :: retrieveTags : headers - " +  headers);
-	    try{
 
-	    	HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-	    	HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.GET, entity, String.class);
-	    	
-	    	log.info("TimeseriesServiceImpl :: retrieveTags : response ----------->>>>>>>>>>>>>>>>> " +  response.getBody());
-    	
-	    	return response.getBody();
-	    	
-	    }catch (Exception e){
-	    	e.printStackTrace();
-	    }
-	    
-	    return null;
-	}
-	
-private String retrieveLatestPoints(String authorization, String id) {
-		
-		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints/latest";
-		
 		RestTemplate restTemplate = new RestTemplate();
-		
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Predix-Zone-Id","34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
-        headers.add("Authorization", authorization);
-        headers.add("Content-Type", "application/json");        
-        String body ="{"+
 
-         		" 'start': '1d-ago'" + "," +
-
-    			" 'tags': [ "+
-
-        		" {"+
-
-            		" 'name': ['"+id+"_location', '"+id+"_rpm', '"+id+"_torque']"+
-
-            		
-
-            	" }]}";
-		MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<String, String>();
-		postParameters.add("content", body);
-		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Predix-Zone-Id", "34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
+		headers.add("Authorization", authorization);
+		headers.add("Content-Type", "application/json");
+		log.info("TimeseriesServiceImpl :: retrieveTags : headers - " + headers);
 		try {
-			
-			//HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(postParameters, headers);
-			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
-			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity, String.class);
-			
-			log.info("TimeseriesServiceImpl :: retrieveLatestPoints : response ==============================> " +  response.getBody());
-			
+
+			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.GET, entity, String.class);
+
+			log.info("TimeseriesServiceImpl :: retrieveTags : response ----------->>>>>>>>>>>>>>>>> "
+					+ response.getBody());
+
 			return response.getBody();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -239,10 +212,137 @@ private String retrieveLatestPoints(String authorization, String id) {
 		return null;
 	}
 
+	private String retrieveLatestPoints(String authorization, String id) {
 
+		String timeSeriesUri = "https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints/latest";
 
+		RestTemplate restTemplate = new RestTemplate();
 
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Predix-Zone-Id", "34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
+		headers.add("Authorization", authorization);
+		headers.add("Content-Type", "application/json");
+		String body = "{" +
+
+		" 'start': '1d-ago'" + "," +
+
+		" 'tags': [ " +
+
+		" {" +
+
+		" 'name': ['" + id + "_location', '" + id + "_rpm', '" + id + "_torque']" +
+
+		" }]}";
+		MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<String, String>();
+		postParameters.add("content", body);
+
+		try {
+
+			// HttpEntity<MultiValueMap<String, String>> requestEntity = new
+			// HttpEntity<MultiValueMap<String, String>>(postParameters,
+			// headers);
+			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
+			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity,
+					String.class);
+
+			log.info("TimeseriesServiceImpl :: retrieveLatestPoints : response ==============================> "
+					+ response.getBody());
+
+			return response.getBody();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public String acsretrieveLatestPoints(String username, String id) throws RestClientException, URISyntaxException {
+		
+		String response = null;
+		
+		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
+		//---------------------------------------------------------------------------------------------------------------------
+		
+		 /*ClientCredentialsResourceDetails clientDetails = new ClientCredentialsResourceDetails();
 	
+		 clientDetails.setClientId("client");
+		 clientDetails.setClientSecret("client");
+		
+		 String accessUrl = "https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token";
+		
+		 clientDetails.setAccessTokenUri(accessUrl);
+		 clientDetails.setGrantType("client_credentials");
+		
+		 OAuth2RestTemplate oauth2RestTemplate = new OAuth2RestTemplate(clientDetails);
+		
+		 log.info("TimeseriesServiceImpl :: Access Token - " + oauth2RestTemplate.getAccessToken().getValue());
+		
+		 String authorization = "Bearer " + oauth2RestTemplate.getAccessToken().getValue();
+		 
+		 log.info("AUTH TOKEN FROM CLIENT LEVEL ::::::::" +authorization);*/
+		
+		 //--------------------------------------------------------------------------------------------------------
+		 
+		//OAuth2RestTemplate restTemplate = getRestTemplate(username, password);
+		//restTemplate.setRequestFactory(requestFactory);
+		
+		ClientCredentialsResourceDetails clientDetails = new ClientCredentialsResourceDetails();
+		
+		 clientDetails.setClientId("client");
+		 clientDetails.setClientSecret("client");
+		
+		 String accessUrl = "https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token";
+		
+		 clientDetails.setAccessTokenUri(accessUrl);
+		 clientDetails.setGrantType("client_credentials");
+		
+		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(clientDetails);
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		String latestUrl = this.context.getRequestURL().toString().replace("/latest", "/validateuser");
+		log.info("XXXCalling LATEST URL::::::::: " + latestUrl);
+		
+		try {
+			String token = null;
+			// 3. Once the policy is evaluated to PERMIT , then the call is pass
+			// forward to the get the token based on client credentials and call
+			// asset endpoints.
+			
+			token = restTemplate.postForObject(new URI(latestUrl), new HttpEntity<>(map), String.class);
+			
+			log.info("AUTH TOKEN FROM USER LEVEL >>>>>>>>>>>>" + token );
 
+			response = retrieveLatestPoints(token, id );
+			
+		} // 4 .If the policy evaluated is condition is resolved to DENY , this
+			// then raises an OAuth2AccessDeniedException and the same exception
+			// is returned back as response.
+		catch (OAuth2AccessDeniedException e) {
+			log.error(
+					"Error validating user " + username + " with following error " + e.getCause() + e.getMessage() + e);
+			throw new RuntimeException(e);
+
+		}	
+
+		return response;
+
+	}
+
+	private OAuth2RestTemplate getRestTemplate(String username, String password) {
+		// get token here based on username password;
+		ResourceOwnerPasswordResourceDetails resourceDetails = new ResourceOwnerPasswordResourceDetails();
+		resourceDetails.setUsername("geuser");
+		resourceDetails.setPassword("geuser");
+		String url = "https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token";
+		resourceDetails.setAccessTokenUri(url);
+		// String[] clientids = this.restConfig.getOauthClientId().split(":");
+		resourceDetails.setClientId("client");
+		resourceDetails.setClientSecret("client");
+
+		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resourceDetails);
+
+		return restTemplate;
+	}
 
 }
