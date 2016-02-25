@@ -9,11 +9,15 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 
 
 @SpringBootApplication
 @EnableAutoConfiguration
 @ComponentScan(basePackages={"com.tcs.timeseries", "com.ge.predix.solsvc.restclient.impl", "com.ge.predix.solsvc.restclient.config"})
+@ImportResource({	
+	"classpath*:META-INF/spring/dataseed-service-acs-context.xml"
+	})
 public class TimeseriesclientApplication {
 	
 	private static final Logger log = LoggerFactory.getLogger(TimeseriesclientApplication.class);

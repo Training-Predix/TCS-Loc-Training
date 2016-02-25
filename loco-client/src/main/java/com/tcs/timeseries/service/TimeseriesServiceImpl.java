@@ -257,7 +257,7 @@ public class TimeseriesServiceImpl {
 		return null;
 	}
 
-	public String acsretrieveLatestPoints(String username, String id) throws RestClientException, URISyntaxException {
+	public String acsretrieveLatestPoints(String username, String password, String id) throws RestClientException, URISyntaxException {
 		
 		String response = null;
 		
@@ -284,23 +284,12 @@ public class TimeseriesServiceImpl {
 		
 		 //--------------------------------------------------------------------------------------------------------
 		 
-		//OAuth2RestTemplate restTemplate = getRestTemplate(username, password);
-		//restTemplate.setRequestFactory(requestFactory);
+		OAuth2RestTemplate restTemplate = getRestTemplate(username, password);
 		
-		ClientCredentialsResourceDetails clientDetails = new ClientCredentialsResourceDetails();
-		
-		 clientDetails.setClientId("client");
-		 clientDetails.setClientSecret("client");
-		
-		 String accessUrl = "https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token";
-		
-		 clientDetails.setAccessTokenUri(accessUrl);
-		 clientDetails.setGrantType("client_credentials");
-		
-		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(clientDetails);
+
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		String latestUrl = this.context.getRequestURL().toString().replace("/latest", "/validateuser");
+		String latestUrl = this.context.getRequestURL().toString().replace("/locomotive/acslatest", "/validateuser");
 		log.info("XXXCalling LATEST URL::::::::: " + latestUrl);
 		
 		try {
@@ -332,11 +321,10 @@ public class TimeseriesServiceImpl {
 	private OAuth2RestTemplate getRestTemplate(String username, String password) {
 		// get token here based on username password;
 		ResourceOwnerPasswordResourceDetails resourceDetails = new ResourceOwnerPasswordResourceDetails();
-		resourceDetails.setUsername("geuser");
-		resourceDetails.setPassword("geuser");
+		resourceDetails.setUsername(username);
+		resourceDetails.setPassword(password);		
 		String url = "https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token";
-		resourceDetails.setAccessTokenUri(url);
-		// String[] clientids = this.restConfig.getOauthClientId().split(":");
+		resourceDetails.setAccessTokenUri(url);		
 		resourceDetails.setClientId("client");
 		resourceDetails.setClientSecret("client");
 

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +39,8 @@ public class TimeseriesServiceController {
 	@Autowired
     private OAuth2Config oauth2;
 	
+	static String authToken ;
+	
 	@RequestMapping(value = "/locomotive/tags", method = RequestMethod.GET)
 	public String retrieveTags() {
 
@@ -60,15 +63,33 @@ public class TimeseriesServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/locomotive/latest", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/locomotive/acslatest", method = { RequestMethod.GET, RequestMethod.POST })
 	public String retrieveLatest(@RequestParam("id") String id,
-			@RequestParam(value = "username", required = true) String username) throws RestClientException, URISyntaxException {
+			@RequestParam(value = "username", required = true) String username,
+			@RequestParam(value = "password", required = true) String password
+			)
+			throws RestClientException, URISyntaxException {
 
-		log.info("TimeseriesServiceController: retrieveACSLatest ");	
+		log.info("TimeseriesServiceController: retrieveACSLatest Inside Locomotive/latest >>>>>>>>> ");	
 	
 		
 		
-		String str1 = tsimpl.acsretrieveLatestPoints(username, id );
+		String str1 = tsimpl.acsretrieveLatestPoints(username, password, id );
+
+		return str1;
+	}
+	
+	@RequestMapping(value = "/locomotive/latest", method = { RequestMethod.GET, RequestMethod.POST })
+	public String retrieveLatest(@RequestParam("id") String id,
+			@RequestParam(value = "username", required = true) String username
+			
+			)
+			throws RestClientException, URISyntaxException {
+
+		log.info("TimeseriesServiceController: <<<<<<<retrieveONLYLatest Inside Locomotive/latest >>>>>>>>> ");	
+	
+		
+		String str1 = tsimpl.timeseries("latest", id );
 
 		return str1;
 	}
@@ -77,40 +98,41 @@ public class TimeseriesServiceController {
 	//------------------------------------------ACS -----------------------------------------
 	
 	@SuppressWarnings("nls")
-    @RequestMapping(value = "/locomotive/validateuser", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/validateuser", method = { RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody String validateUser() throws Exception
  {
+		
+			// Get token based on the client_credentials to access Asset and
+			// timeseries
+			log.info("getting token based on the client_credentials");
+			String auth = null;
+			try {
+				boolean oauthClientIdEncode = true;
+				String oauthPort = "80";
+				String oauthGrantType = "client_credentials";
+				String oauthResource = "/oauth/token";
+				String proxyHost = null;
+				String proxyPort = null;
+				String oauthClientId = "client:client";
+				String oauthHost = "328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io";
 
-		// Get token based on the client_credentials to access Asset and
-		// timeseries
-		log.info("getting token based on the client_credentials");
-		String auth = null;
-		try {
-			boolean oauthClientIdEncode = true;
-			String oauthPort = "80";
-			String oauthGrantType = "client_credentials";
-			String oauthResource = "/oauth/token";
-			String proxyHost = null;
-			String proxyPort = null;
-			String oauthClientId = "client:client";
-			String oauthHost = "328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io";
+				List<Header> headers = this.rest.getOauthHttpHeaders(oauthClientId, oauthClientIdEncode);
+				String tokenString = this.rest.requestToken(headers, oauthResource, oauthHost, oauthPort,
+						oauthGrantType, proxyHost, proxyPort);
 
-			List<Header> headers = this.rest.getOauthHttpHeaders(oauthClientId, oauthClientIdEncode);
-			String tokenString = this.rest.requestToken(headers, oauthResource, oauthHost, oauthPort, oauthGrantType,
-					proxyHost, proxyPort);
+				log.debug("TOKEN = " + tokenString);
 
-			log.debug("TOKEN = " + tokenString);
+				JSONObject token = new JSONObject(tokenString);
 
-			JSONObject token = new JSONObject(tokenString);
+				auth = "Bearer " + token.getString("access_token");
 
-			auth = "Bearer " + token.getString("access_token");
-
-		} catch (HttpClientErrorException hce) {
-			throw new Exception(hce);
+			} catch (HttpClientErrorException hce) {
+				throw new Exception(hce);
+			}
+			return auth;
 		}
-		return auth;
 
-	}
+	
 	
 	
 	

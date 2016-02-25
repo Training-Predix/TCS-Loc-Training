@@ -201,3 +201,243 @@ uaac client update client --authorities "acs.policies.write clients.secret uaa.r
 23. -- verify client scope and authorities
 
 uaac client get client
+
+
+
+
+
+24. -- ACS service set up---------------------------------------------------------------------------------------------------------------
+
+cf create-service predix-acs-training Free locomotive-acs -c '{"trustedIssuerIds":["https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token"]}'
+
+Result:
+
+[predix@localhost ~]$ cf create-service predix-acs-training Free locomotive-acs -c '{"trustedIssuerIds":["https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token"]}'
+Creating service instance locomotive-acs in org Predix-Training / space Training3 as student75...
+OK
+
+25. -- bind the service to the app
+
+cf bs locomotive-client-service locomotive-acs
+
+Result:
+
+[predix@localhost ~]$ cf bs locomotive-client-service locomotive-acs
+Binding service locomotive-acs to app locomotive-client-service in org Predix-Training / space Training3 as student75...
+OK
+TIP: Use 'cf restage locomotive-client-service' to ensure your env variable changes take effect
+
+26. -- uaac
+
+uaac target https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io
+
+Result:
+
+[predix@localhost ~]$ uaac target https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io
+
+Target: https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io
+Context: admin, from client admin
+
+
+27. uaac token client get admin
+
+Result:
+
+[predix@localhost ~]$ uaac token client get admin
+Client secret:  **********
+
+Successfully fetched token via client credentials grant.
+Target: https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io
+Context: admin, from client admin
+
+
+28. uaac client get client
+
+Result:
+
+[predix@localhost ~]$ uaac client get client
+  scope: acs.attributes.read acs.policies.read openid predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user
+      timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query
+      timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user
+  client_id: client
+  resource_ids: none
+  authorized_grant_types: authorization_code client_credentials password refresh_token
+  autoapprove: 
+  action: none
+  authorities: acs.policies.write clients.secret uaa.resource timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query
+      predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user acs.attributes.write clients.admin scim.read acs.policies.read
+      timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest
+      views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user clients.write idps.read scim.write
+  name: client
+  lastmodified: 1455304274961
+
+29. -- update authorities with acs policies, attributes, and uaa token
+
+uaac client update client --authorities "acs.policies.write acs.policies.read acs.attributes.read clients.secret uaa.resource timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user acs.attributes.write clients.admin scim.read timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user clients.write idps.read scim.write zones.328ea004-f3d2-464b-bbf8-8acbd5fa4575.admin predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user"
+
+Result:
+
+[predix@localhost ~]$ uaac client update client --authorities "acs.policies.write acs.policies.read acs.attributes.read clients.secret uaa.resource timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user acs.attributes.write clients.admin scim.read acs.policies.read timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user clients.write idps.read scim.write zones.328ea004-f3d2-464b-bbf8-8acbd5fa4575.admin predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user"^C
+[predix@localhost ~]$ uaac client update client --authorities "acs.policies.write acs.policies.read acs.attributes.read clients.secret uaa.resource timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user acs.attributes.write clients.admin scim.read timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user clients.write idps.read scim.write zones.328ea004-f3d2-464b-bbf8-8acbd5fa4575.admin predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user"
+  scope: acs.attributes.read acs.policies.read openid predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user
+      timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query
+      timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user
+  client_id: client
+  resource_ids: none
+  authorized_grant_types: authorization_code client_credentials password refresh_token
+  autoapprove: 
+  action: none
+  authorities: acs.policies.write clients.secret uaa.resource timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query
+      predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user acs.attributes.write
+      clients.admin scim.read acs.policies.read timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest
+      acs.attributes.read views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user clients.write zones.328ea004-f3d2-464b-bbf8-8acbd5fa4575.admin idps.read scim.write
+  name: client
+  lastmodified: 1456335481460
+
+30. uaac target https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io
+
+31. uaac token client get client
+
+Result:
+
+[predix@localhost ~]$ uaac token client get client
+Client secret:  ******
+
+Successfully fetched token via client credentials grant.
+Target: https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io
+Context: client, from client client
+
+32. -- add acs groups
+
+uaac group add acs.policies.read
+
+Result:
+
+[predix@localhost ~]$ uaac group add acs.policies.read
+  meta
+    version: 0
+    created: 2016-02-24T17:49:33.347Z
+    lastmodified: 2016-02-24T17:49:33.347Z
+  schemas: urn:scim:schemas:core:1.0
+  id: bdc5ebdd-98d9-4957-b4a2-60de9c8e3ace
+  displayname: acs.policies.read
+
+uaac group add acs.policies.write
+
+Result:
+
+[predix@localhost ~]$ uaac group add acs.policies.write
+  meta
+    version: 0
+    created: 2016-02-24T17:50:16.629Z
+    lastmodified: 2016-02-24T17:50:16.629Z
+  schemas: urn:scim:schemas:core:1.0
+  id: aea95331-8af8-4a76-a80a-267107259955
+  displayname: acs.policies.write
+
+uaac group add acs.attributes.read
+
+Result:
+[predix@localhost ~]$ uaac group add acs.attributes.read
+  meta
+    version: 0
+    created: 2016-02-24T17:50:55.629Z
+    lastmodified: 2016-02-24T17:50:55.629Z
+  schemas: urn:scim:schemas:core:1.0
+  id: ddba7b22-d514-4666-9e4e-525861a5b1f0
+  displayname: acs.attributes.read
+  
+  
+uaac group add acs.attributes.write
+
+Result:
+[predix@localhost ~]$ uaac group add acs.attributes.write
+  meta
+    version: 0
+    created: 2016-02-24T17:51:19.952Z
+    lastmodified: 2016-02-24T17:51:19.952Z
+  schemas: urn:scim:schemas:core:1.0
+  id: 080feb9a-59b2-4b46-8af2-ec62358a13b5
+  displayname: acs.attributes.write
+  
+uaac group add predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user
+
+Result:
+[predix@localhost ~]$ uaac group add predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user
+  meta
+    version: 0
+    created: 2016-02-24T17:53:00.908Z
+    lastmodified: 2016-02-24T17:53:00.908Z
+  schemas: urn:scim:schemas:core:1.0
+  id: de787b4d-1a51-4fa6-ab09-ac73b22b6a08
+  displayname: predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user
+
+33. -- add operator user
+uaac user add geoperator -p geoperator --emails geoperator@ge.com
+
+Result:
+[predix@localhost ~]$ uaac user add geoperator -p geoperator --emails geoperator@ge.com
+user account successfully added
+
+uaac member add timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user geoperator
+
+Result:
+[predix@localhost ~]$ uaac member add timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.user geoperator
+success
+
+uaac member add timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest geoperator
+
+Result:
+[predix@localhost ~]$ uaac member add timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.ingest geoperator
+success
+
+uaac member add timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query geoperator
+
+Result:
+[predix@localhost ~]$ uaac member add timeseries.zones.34d2ece8-5faa-40ac-ae89-3a614aa00b6e.query geoperator
+success
+
+uaac member add predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user geoperator
+
+Result:
+[predix@localhost ~]$ uaac member add predix-asset.zones.643df68c-cb16-4f04-8abd-5e87a02ca185.user geoperator
+success
+
+uaac member add views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user geoperator
+
+Result:
+[predix@localhost ~]$ uaac member add views.zones.86a94b2b-dc5d-49e5-a050-dca85f506163.user geoperator
+success
+
+34. -- add acs policies, token, and attributes to geuser (admin user)
+
+uaac member add acs.policies.read geuser
+
+Result:
+[predix@localhost ~]$ uaac member add acs.policies.read geuser
+success
+
+uaac member add acs.policies.write geuser
+
+Result:
+[predix@localhost ~]$ uaac member add acs.policies.write geuser
+success
+
+uaac member add acs.attributes.read geuser
+
+Result:
+[predix@localhost ~]$ uaac member add acs.attributes.read geuser
+success
+
+uaac member add acs.attributes.write geuser
+
+Result:
+[predix@localhost ~]$ uaac member add acs.attributes.write geuser
+success
+
+uaac member add predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user geuser
+
+Result:
+[predix@localhost ~]$ uaac member add predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user geuser
+success
+

@@ -53,12 +53,13 @@ define(['angular', './sample-module'], function (angular, controllers) {
         $scope.getUpdates=function(){
         	var httpRequest = $http({
                 method: 'GET',
-                url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest', 
+    //            url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest',
+                url:'/api/locomotive/latest',
                 params: {"id": id, "username": username},
                 
-                headers: {
-                     'Content-Type':'application/json'
-                         }
+   //             headers: {
+   //                  'Content-Type':'application/json'
+   //                      }
              
             }).success(function(data) {  
            	 
@@ -143,11 +144,12 @@ define(['angular', './sample-module'], function (angular, controllers) {
         {         
            var httpRequest = $http({
              method: 'GET',
-             url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest',
+            // url:'https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io/locomotive/latest',
+             url:'/api/locomotive/latest',
              params: {"id": id , "username": username},
-             headers: {
-                  'Content-Type':'application/json'
-                      }
+       //      headers: {
+       //           'Content-Type':'application/json'
+      //                }
           
          }).success(function(data) {  
         	 

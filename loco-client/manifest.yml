@@ -6,4 +6,12 @@ applications:
  
 env:
     SPRING_PROFILES_ACTIVE : cloud,clouddev
+    # acs integration
+    accessTokenEndpointUrl : https://328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io/oauth/token
+    clientId : client
+    clientSecret: client
+    acsServiceInstanceName : locomotive-acs
+    acsUri : https://predix-acs-training.run.aws-usw02-pr.ice.predix.io
+    acsZone : 64710a8f-4192-4f40-982a-32178dfc50dd 
+    acsPolicyEvaluationTokenScope : predix-acs-training.zones.64710a8f-4192-4f40-982a-32178dfc50dd.user
  

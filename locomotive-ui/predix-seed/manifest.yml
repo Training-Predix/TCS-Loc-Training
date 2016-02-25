@@ -14,4 +14,7 @@ applications:
       assetUrl: https://predix-asset.run.aws-usw02-pr.ice.predix.io
       assetZoneId: 643df68c-cb16-4f04-8abd-5e87a02ca185
       predix_oauthClientId: Y2xpZW50OmNsaWVudA==
+      locomotiveClientUrl: https://locomotive-client-service.run.aws-usw02-pr.ice.predix.io
       REDIS: redis-1
+      
+      
