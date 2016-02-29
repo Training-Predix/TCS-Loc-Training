@@ -1,4 +1,4 @@
-package it.pkg.ge.predix.solsvc.training;
+package it.pkg;
 
 import java.io.IOException;
 

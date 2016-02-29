@@ -1,4 +1,4 @@
-package it.pkg.ge.predix.solsvc.training.service;
+package it.pkg.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.it.pkgmons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Header;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -31,7 +31,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import it.pkg.ge.predix.solsvc.restclient.impl.RestClient;
+import com.ge.predix.solsvc.restclient.impl.RestClient;
 
 @Component
 public class TimeseriesServiceImpl implements EnvironmentAware {
@@ -305,7 +305,7 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		String latestUrl = this.context.getRequestURL().toString().replace("/loit.pkgotive/acslatest", "/validateuser");
+		String latestUrl = this.context.getRequestURL().toString().replace("/locomotive/acslatest", "/validateuser");
 		log.info("XXXCalling LATEST URL::::::::: " + latestUrl);
 		
 		try {

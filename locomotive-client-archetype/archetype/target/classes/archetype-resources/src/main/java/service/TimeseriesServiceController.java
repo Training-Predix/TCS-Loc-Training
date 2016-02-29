@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${package}.ge.predix.solsvc.training.service;
+package ${package}.service;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
-import ${package}.ge.predix.solsvc.restclient.impl.RestClient;
+import com.ge.predix.solsvc.restclient.impl.RestClient;
 
 @RestController
 public class TimeseriesServiceController {
@@ -35,7 +35,7 @@ public class TimeseriesServiceController {
 		
 	static String authToken ;
 	
-	@RequestMapping(value = "/lo${package}otive/tags", method = RequestMethod.GET)
+	@RequestMapping(value = "/locomotive/tags", method = RequestMethod.GET)
 	public String retrieveTags() {
 
 		log.info("TimeseriesServiceController: retrieveTags ");
@@ -46,7 +46,7 @@ public class TimeseriesServiceController {
 	}
 	
 
-	@RequestMapping(value = "/lo${package}otive/datapoints", method = RequestMethod.GET)
+	@RequestMapping(value = "/locomotive/datapoints", method = RequestMethod.GET)
 	public String retrieveDatapoints() {
 
 		log.info("TimeseriesServiceController: retrievedatapoints ");
@@ -57,14 +57,14 @@ public class TimeseriesServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/lo${package}otive/acslatest", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/locomotive/acslatest", method = { RequestMethod.GET, RequestMethod.POST })
 	public String retrieveLatest(@RequestParam("id") String id,
 			@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password
 			)
 			throws RestClientException, URISyntaxException {
 
-		log.info("TimeseriesServiceController: retrieveACSLatest Inside Lo${package}otive/latest >>>>>>>>> ");	
+		log.info("TimeseriesServiceController: retrieveACSLatest Inside Locomotive/latest >>>>>>>>> ");	
 	
 		
 		
@@ -73,14 +73,14 @@ public class TimeseriesServiceController {
 		return str1;
 	}
 	
-	@RequestMapping(value = "/lo${package}otive/latest", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/locomotive/latest", method = { RequestMethod.GET, RequestMethod.POST })
 	public String retrieveLatest(@RequestParam("id") String id,
 			@RequestParam(value = "username", required = true) String username
 			
 			)
 			throws RestClientException, URISyntaxException {
 
-		log.info("TimeseriesServiceController: <<<<<<<retrieveONLYLatest Inside Lo${package}otive/latest >>>>>>>>> ");	
+		log.info("TimeseriesServiceController: <<<<<<<retrieveONLYLatest Inside Locomotive/latest >>>>>>>>> ");	
 	
 		
 		String str1 = tsimpl.timeseries("latest", id );

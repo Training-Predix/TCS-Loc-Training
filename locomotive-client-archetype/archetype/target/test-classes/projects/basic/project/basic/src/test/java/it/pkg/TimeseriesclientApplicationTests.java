@@ -1,4 +1,4 @@
-package it.pkg.tcs.timeseries;
+package it.pkg;
 
 
 public class TimeseriesclientApplicationTests {

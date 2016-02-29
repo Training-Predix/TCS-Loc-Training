@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${package}.ge.predix.solsvc.training;
+package ${package};
 
 import java.util.Arrays;
 
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan(basePackages={"${package}.ge.predix.solsvc.training", "${package}.ge.predix.solsvc.restclient.impl", "${package}.ge.predix.solsvc.restclient.config"})
+@ComponentScan(basePackages={"${package}", "com.ge.predix.solsvc.restclient.impl", "com.ge.predix.solsvc.restclient.config"})
 @ImportResource({	
 	"classpath*:META-INF/spring/dataseed-service-acs-context.xml"
 	})

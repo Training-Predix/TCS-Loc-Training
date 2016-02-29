@@ -1,4 +1,4 @@
-package it.pkg.ge.predix.solsvc.training.service;
+package it.pkg.service;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 
-import it.pkg.ge.predix.solsvc.restclient.impl.RestClient;
+import com.ge.predix.solsvc.restclient.impl.RestClient;
 
 @RestController
 public class TimeseriesServiceController {
@@ -32,7 +32,7 @@ public class TimeseriesServiceController {
 		
 	static String authToken ;
 	
-	@RequestMapping(value = "/loit.pkgotive/tags", method = RequestMethod.GET)
+	@RequestMapping(value = "/locomotive/tags", method = RequestMethod.GET)
 	public String retrieveTags() {
 
 		log.info("TimeseriesServiceController: retrieveTags ");
@@ -43,7 +43,7 @@ public class TimeseriesServiceController {
 	}
 	
 
-	@RequestMapping(value = "/loit.pkgotive/datapoints", method = RequestMethod.GET)
+	@RequestMapping(value = "/locomotive/datapoints", method = RequestMethod.GET)
 	public String retrieveDatapoints() {
 
 		log.info("TimeseriesServiceController: retrievedatapoints ");
@@ -54,14 +54,14 @@ public class TimeseriesServiceController {
 	}
 	
 	
-	@RequestMapping(value = "/loit.pkgotive/acslatest", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/locomotive/acslatest", method = { RequestMethod.GET, RequestMethod.POST })
 	public String retrieveLatest(@RequestParam("id") String id,
 			@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password
 			)
 			throws RestClientException, URISyntaxException {
 
-		log.info("TimeseriesServiceController: retrieveACSLatest Inside Loit.pkgotive/latest >>>>>>>>> ");	
+		log.info("TimeseriesServiceController: retrieveACSLatest Inside Locomotive/latest >>>>>>>>> ");	
 	
 		
 		
@@ -70,14 +70,14 @@ public class TimeseriesServiceController {
 		return str1;
 	}
 	
-	@RequestMapping(value = "/loit.pkgotive/latest", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/locomotive/latest", method = { RequestMethod.GET, RequestMethod.POST })
 	public String retrieveLatest(@RequestParam("id") String id,
 			@RequestParam(value = "username", required = true) String username
 			
 			)
 			throws RestClientException, URISyntaxException {
 
-		log.info("TimeseriesServiceController: <<<<<<<retrieveONLYLatest Inside Loit.pkgotive/latest >>>>>>>>> ");	
+		log.info("TimeseriesServiceController: <<<<<<<retrieveONLYLatest Inside Locomotive/latest >>>>>>>>> ");	
 	
 		
 		String str1 = tsimpl.timeseries("latest", id );

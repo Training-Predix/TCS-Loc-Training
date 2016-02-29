@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${package}.ge.predix.solsvc.training.service;
+package ${package}.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.${package}mons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Header;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -34,7 +34,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import ${package}.ge.predix.solsvc.restclient.impl.RestClient;
+import com.ge.predix.solsvc.restclient.impl.RestClient;
 
 @Component
 public class TimeseriesServiceImpl implements EnvironmentAware {
@@ -308,7 +308,7 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		String latestUrl = this.context.getRequestURL().toString().replace("/lo${package}otive/acslatest", "/validateuser");
+		String latestUrl = this.context.getRequestURL().toString().replace("/locomotive/acslatest", "/validateuser");
 		log.info("XXXCalling LATEST URL::::::::: " + latestUrl);
 		
 		try {

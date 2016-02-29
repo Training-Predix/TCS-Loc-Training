@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${package}.ge.predix.solsvc.training;
+package ${package};
 
 import java.io.IOException;
 
