@@ -1,4 +1,4 @@
-package com.tcs.timeseries.service;
+package com.ge.predix.solsvc.training.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;

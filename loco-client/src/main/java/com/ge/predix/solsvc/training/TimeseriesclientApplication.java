@@ -1,4 +1,4 @@
-package com.tcs.timeseries;
+package com.ge.predix.solsvc.training;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan(basePackages={"com.tcs.timeseries", "com.ge.predix.solsvc.restclient.impl", "com.ge.predix.solsvc.restclient.config"})
+@ComponentScan(basePackages={"com.ge.predix.solsvc.training", "com.ge.predix.solsvc.restclient.impl", "com.ge.predix.solsvc.restclient.config"})
 @ImportResource({	
 	"classpath*:META-INF/spring/dataseed-service-acs-context.xml"
 	})

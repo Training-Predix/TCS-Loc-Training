@@ -1,4 +1,4 @@
-package com.tcs.timeseries.service;
+package com.ge.predix.solsvc.training.service;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;

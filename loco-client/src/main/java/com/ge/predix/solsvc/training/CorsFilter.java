@@ -1,4 +1,4 @@
-package com.tcs.timeseries;
+package com.ge.predix.solsvc.training;
 
 import java.io.IOException;
 
