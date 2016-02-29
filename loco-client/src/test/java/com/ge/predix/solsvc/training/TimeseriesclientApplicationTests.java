@@ -1,4 +1,4 @@
-package com.tcs.timeseries;
+package com.ge.predix.solsvc.training;
 
 
 public class TimeseriesclientApplicationTests {
