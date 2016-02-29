@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.math.util.MathUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -22,10 +25,19 @@ import com.ge.simulator.model.RPMData;
 import com.ge.simulator.model.TorqueData;
 
 @RestController
-public class LocomotivesimulatorController {
+public class LocomotivesimulatorController implements EnvironmentAware {
 	
 	private static final Log logger = LogFactory.getLog(LocomotivesimulatorController.class);
 	
+	@Value("${timeseriesZone}")
+	String timeseriesZone;
+		
+	@Value("${timeseriesUrl}")
+	String timeseriesUrl;
+	
+	@Value("${clientId}")
+	String clientId;
+		
 	private static boolean runSimulation = false;
 	
 	LocomotiveGatewayType locomotiveGatewayType;
@@ -88,7 +100,7 @@ public class LocomotivesimulatorController {
 			locomotiveGatewayType.setTorquedata(torqueData);
 							
 			RestTemplate restTemplate = new RestTemplate();
-			final String uri ="http://locomotive-dataingestion-service.run.aws-usw02-pr.ice.predix.io/SaveTimeSeriesData";
+			final String uri = this.timeseriesUrl; //"http://locomotive-dataingestion-service.run.aws-usw02-pr.ice.predix.io/SaveTimeSeriesData";
 			//final String uri ="http://localhost:8080/SaveTimeSeriesData";
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonInString = null;
@@ -102,8 +114,9 @@ public class LocomotivesimulatorController {
 			logger.info(" LocomotivesimulatorController :: generateSimulatorData - json result: " + jsonInString);
 			
 			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
-		    mvm.add("clientId","client");
-		    mvm.add("tenantId", "34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
+		    mvm.add("clientId", this.clientId);
+		    //mvm.add("tenantId", "34d2ece8-5faa-40ac-ae89-3a614aa00b6e");
+		    mvm.add("tenantId", this.timeseriesZone);
 		    mvm.add("content", jsonInString);
 			String result = restTemplate.postForObject(uri, mvm, String.class);
 			
@@ -113,6 +126,13 @@ public class LocomotivesimulatorController {
 			
 	//	}
 				
+	}
+	
+	@Override
+	public void setEnvironment(Environment env) {
+		this.timeseriesZone = env.getProperty("timeseriesZone");
+		this.timeseriesUrl = env.getProperty("timeseriesUrl");		
+		this.clientId = env.getProperty("clientId");
 	}
 	
     private static double generateRandomUsageValue(double low, double high) {
