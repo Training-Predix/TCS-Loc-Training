@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Header;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -297,8 +298,9 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 		 log.info("AUTH TOKEN FROM CLIENT LEVEL ::::::::" +authorization);*/
 		
 		 //--------------------------------------------------------------------------------------------------------
-		 
-		OAuth2RestTemplate restTemplate = getRestTemplate(username, password);
+		 //Z2V1c2Vy - geuser & Z2VvcGVyYXRvcg== - geoperator
+		byte[] passwordDecoded= Base64.decodeBase64(password.getBytes());
+		OAuth2RestTemplate restTemplate = getRestTemplate(username, new String(passwordDecoded));
 		
 
 		
