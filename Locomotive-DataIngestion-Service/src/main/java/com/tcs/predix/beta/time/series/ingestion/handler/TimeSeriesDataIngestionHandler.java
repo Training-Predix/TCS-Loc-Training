@@ -99,34 +99,7 @@ public class TimeSeriesDataIngestionHandler extends BaseFactoryIT
 		     // --> pump lat data
 		    this.timeSeriesFactory.create(latBuilder(json));
 		    
-/*        	log.info("WebSocket URL : " + this.wsConfig.getPredixWebSocketURI());
 
-            
-			try {
-				
-				wsClient.postToWebSocketServer(data);
-				
-			} catch (Exception e) {
-				e.printStackTrace();				
-			}*/
-            
-            // calculate and submit data to postgres
-            
-           /* long life = ShelfLifeCalculator.calculateOnePointShelfLife(json);
-            
-            CargoShelfLife shelfLife = new CargoShelfLife();
-            shelfLife.setAssetId(json.getHData().getName().split("_humidit")[0]);
-            shelfLife.setShelfLife(life);
-
-            
-            shelfLife.setTimestamp(shelfLife.getTimestamp());
-            
-            try {
-				HttpWrapper.postHttpResource(new Gson().toJson(shelfLife));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
             
             
           
