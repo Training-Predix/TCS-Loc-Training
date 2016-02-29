@@ -1,0 +1,9 @@
+---
+applications:
+  - name: predix-alarmservice
+    buildpack: java_buildpack
+    path: target/alarmservice-0.0.1-SNAPSHOT.jar
+    services:
+      - training_pgsql193
+env:
+    db_service_name: training_pgsql193
