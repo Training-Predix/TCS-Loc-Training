@@ -3,14 +3,11 @@ package com.tcs.timeseries.service;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.http.Header;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,13 +29,7 @@ public class TimeseriesServiceController {
 	@Autowired
 	@Qualifier("restClient")
 	public  RestClient rest;
-	
-	@Autowired
-    private HttpServletRequest context;
-	
-	@Autowired
-    private OAuth2Config oauth2;
-	
+		
 	static String authToken ;
 	
 	@RequestMapping(value = "/locomotive/tags", method = RequestMethod.GET)
