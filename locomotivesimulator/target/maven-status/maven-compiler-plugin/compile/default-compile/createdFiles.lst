@@ -1,0 +1,7 @@
+com\ge\simulator\model\LocationData.class
+com\ge\simulator\service\LocomotivesimulatorController.class
+com\ge\simulator\model\LocomotiveGatewayType.class
+com\ge\simulator\model\Locomotive.class
+com\ge\simulator\app\LocomotivesimulatorApplication.class
+com\ge\simulator\model\RPMData.class
+com\ge\simulator\model\TorqueData.class
