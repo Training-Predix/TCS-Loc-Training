@@ -28,6 +28,7 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -104,8 +105,6 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 
 		} else if (tag.equalsIgnoreCase("data")) {
 			String dataPoints = retrieveDataPoints(authorization);
-			// log.info("TimeseriesServiceImpl :: retrieveDataPoints : response
-			// - " + dataPoints);
 
 			try {
 				JSONObject dataPointsObject = new JSONObject(dataPoints);
@@ -188,7 +187,7 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity,
 					String.class);
 
-			log.info("TimeseriesServiceImpl :: retrieveDataPoints : response ==============================> "
+			log.info("TimeseriesServiceImpl :: retrieveDataPoints : response - "
 					+ response.getBody());
 
 			return response.getBody();
@@ -215,7 +214,7 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 			HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.GET, entity, String.class);
 
-			log.info("TimeseriesServiceImpl :: retrieveTags : response ----------->>>>>>>>>>>>>>>>> "
+			log.info("TimeseriesServiceImpl :: retrieveTags : response - "
 					+ response.getBody());
 
 			return response.getBody();
@@ -253,14 +252,11 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 
 		try {
 
-			// HttpEntity<MultiValueMap<String, String>> requestEntity = new
-			// HttpEntity<MultiValueMap<String, String>>(postParameters,
-			// headers);
 			HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
 			HttpEntity<String> response = restTemplate.exchange(timeSeriesUri, HttpMethod.POST, requestEntity,
 					String.class);
 
-			log.info("TimeseriesServiceImpl :: retrieveLatestPoints : response ==============================> "
+			log.info("TimeseriesServiceImpl :: retrieveLatestPoints : response - "
 					+ response.getBody());
 
 			return response.getBody();
@@ -310,9 +306,8 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 		
 		try {
 			String token = null;
-			// 3. Once the policy is evaluated to PERMIT , then the call is pass
-			// forward to the get the token based on client credentials and call
-			// asset endpoints.
+			// 3. Once the policy is evaluated to PERMIT , then the call is passed
+			// forward to get the token based on client credentials and call retrieveLatestPoints
 			
 			token = restTemplate.postForObject(new URI(latestUrl), new HttpEntity<>(map), String.class);
 			
@@ -320,7 +315,7 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 
 			response = retrieveLatestPoints(token, id );
 			
-		} // 4 .If the policy evaluated is condition is resolved to DENY , this
+		} // 4 .If the policy evaluated condition is resolved to DENY, 
 			// then raises an OAuth2AccessDeniedException and the same exception
 			// is returned back as response.
 		catch (OAuth2AccessDeniedException e) {
@@ -332,6 +327,37 @@ public class TimeseriesServiceImpl implements EnvironmentAware {
 
 		return response;
 
+	}
+	
+	
+	public String validateUser() throws Exception {
+		// Get token based on the client_credentials 
+		log.info("getting token based on the client_credentials");
+		String auth = null;
+		try {
+			boolean oauthClientIdEncode = true;
+			String oauthPort = "80";
+			String oauthGrantType = this.predix_oauthGrantType; //"client_credentials";
+			String oauthResource = "/oauth/token";
+			String proxyHost = null;
+			String proxyPort = null;
+			String oauthClientId = this.predix_oauthClientId; //"client:client";
+			String oauthHost = this.predix_oauthRestHost; //"328ea004-f3d2-464b-bbf8-8acbd5fa4575.predix-uaa-training.run.aws-usw02-pr.ice.predix.io";
+
+			List<Header> headers = this.rest.getOauthHttpHeaders(oauthClientId, oauthClientIdEncode);
+			String tokenString = this.rest.requestToken(headers, oauthResource, oauthHost, oauthPort,
+					oauthGrantType, proxyHost, proxyPort);
+
+			log.debug("TOKEN = " + tokenString);
+
+			JSONObject token = new JSONObject(tokenString);
+
+			auth = "Bearer " + token.getString("access_token");
+
+		} catch (HttpClientErrorException hce) {
+			throw new Exception(hce);
+		}
+		return auth;
 	}
 	
 	@Override
